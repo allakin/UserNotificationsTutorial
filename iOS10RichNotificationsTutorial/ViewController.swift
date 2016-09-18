@@ -18,6 +18,14 @@ class ViewController: UIViewController {
         content.body = "How many countries are there in Africa?"
         content.badge = 1
         content.categoryIdentifier = "quizCategory"
+        content.sound = UNNotificationSound.default()
+        
+        let url = Bundle.main.url(forResource: "Images/Aladdin-Thinking-GIF", withExtension: "gif")
+        
+        if let attachment = try? UNNotificationAttachment(identifier: "africaQuiz", url: url!, options: nil) {
+            content.attachments = [attachment]
+        }
+        
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         
@@ -43,11 +51,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // some other way of handling notification
         completionHandler([.alert, .sound])
     }
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: () -> Void) {
+    func userNotificationCenter(_: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         switch response.actionIdentifier {
             case "answerOne":
             imageView.image = UIImage(named: "wrong")
@@ -61,6 +69,9 @@ extension ViewController: UNUserNotificationCenterDelegate {
         default:
             break
         }
+        
+        
+        
         completionHandler()
 
     }
